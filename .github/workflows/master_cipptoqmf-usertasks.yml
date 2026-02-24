@@ -15,21 +15,11 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+    
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D2C44DE279C2440792531AE3E4D82DDE }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_31BC473CBB444C4BB5D058991AA35EAD }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_55E84D10A33747F19D16413372F5DDAD }}
-
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
@@ -37,4 +27,6 @@ jobs:
           app-name: 'cipptoqmf-usertasks'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DF0B9E9165484E94A5EB37AEC51E9593 }}
+          sku: 'flexconsumption'
+        
